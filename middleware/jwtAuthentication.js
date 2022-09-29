@@ -11,6 +11,7 @@ function authenticate(req, res, next) {
   try {
     decoded = jwt.verify(token, process.env.SECRET)
   } catch (e) {
+    res.status(401)
     res.json(e)
     return
   }

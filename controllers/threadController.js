@@ -17,13 +17,23 @@ async function getThreadById(req, res) {
   res.json(threadDto)
 }
 
-async function postNewThread(req, res) {
-  await threadService.createNewThread(req.body, req.user)
+async function postNewThread(req, res, next) {
+  try {
+    await threadService.createNewThread(req.body, req.auth.name)
+  } catch (e) {
+    next(e)
+    return
+  }
   res.sendStatus(201)
 }
 
-async function deleteThreadById(req, res) {
-  await threadService.removeThreadById(req.params.threadId)
+async function deleteThreadById(req, res, next) {
+  try {
+    await threadService.removeThreadById(req.params.threadId, req.auth.name)
+  } catch (e) {
+    next(e)
+    return
+  }
   res.sendStatus(200)
 }
 

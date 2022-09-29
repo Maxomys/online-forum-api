@@ -1,5 +1,6 @@
 const threadRepository = require('../repositories/threadRepository')
 const postRepository = require('../repositories/postRepository')
+const userRepository = require('../repositories/userRepository')
 const { threadDto } = require('../mappers/threadMapper')
 
 async function getThreadPageByCategoryId(categoryId, options) {
@@ -14,7 +15,13 @@ async function getThreadPageByCategoryId(categoryId, options) {
   return page
 }
 
-async function createNewThread(threadDto, user) {
+async function createNewThread(threadDto, username) {
+  const user = await userRepository.getUserByUsername(username)
+  if (!user) {
+    let error = new Error('User not found for name: ' + username)
+    error.status = 400
+    throw error
+  }
   return await threadRepository.saveThread({
     name: threadDto.name,
     author: user._id,
@@ -22,7 +29,18 @@ async function createNewThread(threadDto, user) {
   })
 }
 
-async function removeThreadById(threadId) {
+async function removeThreadById(threadId, username) {
+  const user = await userRepository.getUserByUsername(username)
+  if (!user) {
+    let error = new Error('User not found for name: ' + username)
+    error.status = 400
+    throw error
+  }
+  if (user.accountType != 'admin') {
+    let error = new Error('Only admin can remove threads')
+    error.status = 401
+    throw error
+  }
   await postRepository.removePostsByThreadId(threadId)
   await threadRepository.deleteThreadById(threadId)
 }

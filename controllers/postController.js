@@ -17,13 +17,22 @@ async function getPostById(req, res) {
   res.json(postDto)
 }
 
-async function postNewPost(req, res) {
-  await postService.createNewPost(req.body, req.user)
+async function postNewPost(req, res, next) {
+  try {
+    await postService.createNewPost(req.body, req.auth.name)
+  } catch (e) {
+    next(e)
+    return
+  }
   res.sendStatus(201)
 }
 
-async function deletePostById(req, res) {
-  await postService.deletePostById(req.params.postId)
+async function deletePostById(req, res, next) {
+  try {
+    await postService.deletePostById(req.params.postId, req.auth.name)
+  } catch (e) {
+    
+  }
   res.sendStatus(200)
 }
 
