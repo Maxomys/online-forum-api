@@ -1,0 +1,308 @@
+openapi: 3.0.0
+info:
+  title: Online forum api
+  version: 1.0.0
+  description: Restful CRUD API for an online forum
+
+paths:
+  /api/v1/login:
+    post:
+      summary: allows user login and returns jwt tokens
+      tags:
+        - users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDto'
+      responses:
+        200:
+          description:
+            returns tokens
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: jwt token
+                  refreshToken:
+                    type: string
+                    description: jwt refresh token
+        401:
+          description:
+            unauthorized
+  /api/v1/tokenRefresh:
+    post:
+      summary: returns jwt tokens
+      tags:
+        - users
+      responses:
+        200:
+          description:
+            returns tokens
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: jwt token
+                  refreshToken:
+                    type: string
+                    description: jwt refresh token
+        401:
+          description:
+            unauthorized
+  /api/v1/users/{username}:
+    get:
+      summary: return user by username
+      tags:
+        - users
+      responses:
+        200:
+          description: returns the user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        404:
+          description: user not found
+  /api/v1/users:
+    post:
+      summary: create new user
+      tags:
+        - users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        201:
+          description:
+            user successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /api/v1/categories:
+    get:
+      summary: return all forum categories
+      tags:
+        - categories
+      responses:
+        200:
+          description: returns array of category objects
+    post:
+      summary: post new category
+      security:
+        - bearerAuth: []
+      tags:
+        - categories
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: 
+                  type: string
+                  description: category name
+      responses:
+        201:
+          description: category successfully cerated
+  /api/v1/categories/{categoryId}:
+    delete:
+      summary: delete category by id
+      tags:
+        - categories
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: category successfully deleted
+  /api/v1/categories/{categoryId}/threads:
+    get:
+      summary:
+        get page of threads in given category
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: string
+          description: 
+            Number of requested page, default - 1
+        - in: query
+          name: limit
+          schema:
+            type: string
+          description: 
+            Limit of threads per page, default - 10
+        - in: query
+          name: sort
+          schema:
+            type: string
+          description: 
+            Property of thread to sort by, default - modifiedAt
+        - in: query
+          name: dir
+          schema:
+            type: string
+          description: 
+            Sorting direction, '1' for ascending, '-1' for descending, default - 1
+      tags:
+        - threads
+      responses:
+        200:
+          description: categories received
+  /api/v1/threads/{threadId}/threads:
+    get:
+      summary: Get thread by its id
+      tags:
+        - threads
+      responses:
+        200:
+          description: returns the thread
+    delete:
+      summary: Delete thread by its id
+      security:
+        - bearerAuth: []
+      tags:
+        - threads
+      responses:
+        200:
+          description: thread successfully deleted
+        404:
+          description: thread not found
+  /api/v1/threads:
+    post:
+      summary: Post new thread
+      security:
+        - bearerAuth: []
+      tags:
+        - threads
+      responses:
+        201:
+          description: New thread successfully created
+  /api/v1/{threadId}/posts:
+    get:
+      summary: Get page of posts per given thread
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: string
+          description: 
+            Number of requested page, default - 1
+        - in: query
+          name: limit
+          schema:
+            type: string
+          description: 
+            Limit of threads per page, default - 10
+        - in: query
+          name: sort
+          schema:
+            type: string
+          description: 
+            Property of thread to sort by, default - createdAt
+        - in: query
+          name: dir
+          schema:
+            type: string
+          description: 
+            Sorting direction, '1' for ascending, '-1' for descending, default - -1
+      tags:
+        - posts
+      responses:
+        200:
+          description: Returns posts page
+        404:
+          description: Not found
+  /api/v1/posts/{postId}:
+    get:
+      summary: Get post for its id
+      tags:
+        - posts
+      responses:
+        200:
+          description: returns the post
+        404:
+          description: Post not found
+    delete:
+      summary: Delete post by its postId
+      security:
+        - bearerAuth: []
+      tags:
+        - posts
+      responses:
+        200: 
+          description: Successfully deleted the post
+        404:
+          description: Post not found
+  /api/v1/posts:
+    post:
+      summary: Create new post
+      security:
+        - bearerAuth: []
+      tags:
+        - posts
+      responses:
+        201:
+          description: Post successfully created
+      
+
+
+components:
+  schemas:
+    UserDto:
+      type: object
+      properties:
+        username: 
+          type: string
+        password:
+          type: string
+      example:
+        username: user1
+        password: password
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        createdAt:
+          type: string
+        accountType:
+          type: string
+        about:
+          type: string
+        isBanned: 
+          type: boolean
+        likeCount:
+          type: number
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid  
+tags:
+  - name: users
+  - name: categories
+  - name: threads
+  - name: posts

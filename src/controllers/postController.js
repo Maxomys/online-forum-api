@@ -4,7 +4,7 @@ async function getPostsPageByThreadId(req, res) {
   const options = {
     page: req.query.page ?? 1,
     limit: req.query.limit ?? process.env.PAGE_LIMIT,
-    sort: {[req.query.sort ?? 'createdAt']: req.query.dir ?? 1}
+    sort: {[req.query.sort ?? 'createdAt']: req.query.dir ?? -1}
   }
   const page = await postService.getPostPageByThreadId(req.params.threadId, options)
   res.status(200)
