@@ -29,7 +29,7 @@ describe('Thread service unit tests', () => {
       .returns(3)
   
     let dtoPage = await threadService.getThreadPageByCategoryId()
-    expect(dtoPage.docs[0].postsCount).to.equal(3)
+    expect(dtoPage.docs[0].postCount).to.equal(3)
   })
 
   it('throws user not found error', async () => {
