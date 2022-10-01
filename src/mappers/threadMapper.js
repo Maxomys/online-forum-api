@@ -3,7 +3,7 @@ function threadDto(thread, postCount) {
     id: thread._id,
     name: thread.name,
     authorName: thread.author.name,
-    postsCount: postCount,
+    postCount: postCount,
     modifiedAt: thread.modifiedAt.toUTCString()
   }
 }

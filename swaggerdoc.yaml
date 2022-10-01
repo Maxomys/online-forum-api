@@ -102,6 +102,10 @@ paths:
         - categories
       responses:
         200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
           description: returns array of category objects
     post:
       summary: post new category
@@ -114,11 +118,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name: 
-                  type: string
-                  description: category name
+              $ref: '#/components/schemas/CategoryDto'
       responses:
         201:
           description: category successfully cerated
@@ -166,6 +166,10 @@ paths:
       responses:
         200:
           description: categories received
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThreadPage'
   /api/v1/threads/{threadId}/threads:
     get:
       summary: Get thread by its id
@@ -174,6 +178,10 @@ paths:
       responses:
         200:
           description: returns the thread
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Thread'
     delete:
       summary: Delete thread by its id
       security:
@@ -188,6 +196,11 @@ paths:
   /api/v1/threads:
     post:
       summary: Post new thread
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ThreadDto'
       security:
         - bearerAuth: []
       tags:
@@ -210,13 +223,13 @@ paths:
           schema:
             type: string
           description: 
-            Limit of threads per page, default - 10
+            Limit of posts per page, default - 10
         - in: query
           name: sort
           schema:
             type: string
           description: 
-            Property of thread to sort by, default - createdAt
+            Property of post to sort by, default - createdAt
         - in: query
           name: dir
           schema:
@@ -228,6 +241,10 @@ paths:
       responses:
         200:
           description: Returns posts page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostPage'
         404:
           description: Not found
   /api/v1/posts/{postId}:
@@ -238,6 +255,10 @@ paths:
       responses:
         200:
           description: returns the post
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
         404:
           description: Post not found
     delete:
@@ -254,6 +275,11 @@ paths:
   /api/v1/posts:
     post:
       summary: Create new post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostDto'
       security:
         - bearerAuth: []
       tags:
@@ -287,12 +313,137 @@ components:
           type: string
         accountType:
           type: string
+          enum:
+            - user
+            - admin
         about:
           type: string
         isBanned: 
           type: boolean
         likeCount:
           type: number
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        threadCount:
+          type: number
+    CategoryDto:
+      type: object
+      properties:
+        name:
+          type: string
+    ThreadPage:
+      type: object
+      properties:
+        docs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Thread'
+        totalDocs:
+          type: number
+        limit:
+          type: number
+        hasPrevPage:
+          type: boolean
+        hasNextPage:
+          type: boolean
+        page:
+          type: number
+        totalPages:
+          type: number
+        prevPage:
+          type: number
+        nextPage:
+          type: number
+        pagingCounter:
+            type: number
+    Thread:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        authorName:
+          type: string
+        postCount:
+          type: number
+        modifiedAt:
+          type: string
+    ThreadDto:
+      type: object
+      properties:
+        name:
+          type: string
+        categoryId:
+          type: string
+    PostPage:
+      type: object
+      properties:
+        docs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Post'
+        totalDocs:
+          type: number
+        limit:
+          type: number
+        hasPrevPage:
+          type: boolean
+        hasNextPage:
+          type: boolean
+        page:
+          type: number
+        totalPages:
+          type: number
+        prevPage:
+          type: number
+        nextPage:
+          type: number
+        pagingCounter:
+          type: number
+    Post:
+      type: object
+      properties:
+        id:
+          type: string
+        contents:
+          type: string
+        createdAt:
+          type: string
+        likes:
+          type: number
+        edited:
+          type: boolean
+        threadName:
+          type: string
+        author:
+          type: object
+          properties:
+            id:
+              type: string
+            username:
+              type: string
+        replyToId:
+          type: string
+    PostDto:
+      type: object
+      properties:
+        contents:
+          type: string
+        author:
+          type: string
+          description: id of post's author
+        thread:
+          type: string
+          description: id of the thread the post is in
+        replyTo:
+          type: string
+          description: id of the post this post is replying to
   securitySchemes:
     BearerAuth:
       type: http
