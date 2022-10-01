@@ -1,7 +1,6 @@
 const postRepository = require('../repositories/postRepository')
 const userRepository = require('../repositories/userRepository')
 const { postDto } = require('../mappers/postMapper')
-const postModel = require('../models/postModel')
 
 async function getPostPageByThreadId(threadId, options) {
   let page = await postRepository.getPostPageByThreadId(threadId, options)
@@ -41,7 +40,7 @@ async function deletePostById(postId, username) {
   const foundPost = await postRepository.getPostById(postId)
 
   //check if retrieved user is an admin or the author 
-  if (user._id != foundPost.author && user.accountType != 'admin') {
+  if (user._id !== foundPost.author && user.accountType !== 'admin') {
     let error = new Error('Not authorized to delete the post')
     error.status = 401
     throw error

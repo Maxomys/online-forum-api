@@ -1,4 +1,5 @@
 const expect = require("chai").expect
+const sinon = require('sinon')
 const { stub } = require("sinon")
 
 const categoryService = require('../../src/services/categoryService')
@@ -12,14 +13,17 @@ describe('CategoryService unit tests', () => {
     name: "name"
   }]
 
+  afterEach(() => {
+    sinon.restore()
+  })
+
   it('returns category dtos', async () => {
-    const getAllCategoriesFn = stub(categoryRepository, 'getAllCategories')
+    sinon.stub(categoryRepository, 'getAllCategories')
       .returns(categories)
-    const getThreadCountByCategoryIdFn = stub(threadRepository, 'getThreadCountByCategoryId')
+    sinon.stub(threadRepository, 'getThreadCountByCategoryId')
       .returns(6)
 
     let dtos = await categoryService.getAllCategories()
-    console.log(dtos)
 
     expect(dtos).to.deep.equal([{
       id: "categoryId",
