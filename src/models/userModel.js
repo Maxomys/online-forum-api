@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     maxLength: [16, 'Username can be 16 characters long.'],
-    uniquie: true,
+    unique: true,
     required: true
   },
   email: {
@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
       validator: validator.isEmail,
       message: 'Email validation failed.'
     },
-    uniquie: true,
+    unique: true,
     required: true
   },
   password: {

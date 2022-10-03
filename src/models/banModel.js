@@ -16,6 +16,10 @@ const banSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
+  givenAt: {
+    type: Date,
+    default: Date.now
+  },
   canceled: {
     type: Boolean,
     default: false

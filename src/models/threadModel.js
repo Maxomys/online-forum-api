@@ -5,7 +5,7 @@ const threadSchema = new mongoose.Schema({
   name: {
     type: String,
     maxLength: 200,
-    uniquie: true,
+    unique: true,
     required: true
   },
   modifiedAt: {

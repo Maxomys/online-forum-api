@@ -7,7 +7,7 @@ async function getAllCategories(req, res) {
 }
 
 async function postNewCategory(req, res, next) {
-  if (req.auth.accountType != 'admin') {
+  if (req.auth.accountType !== 'admin') {
     let error = new Error('Unauthorized, not and admin')
     error.status = 401
     next(error)
@@ -18,7 +18,7 @@ async function postNewCategory(req, res, next) {
 }
 
 async function deleteCategoryById(req, res, next) {
-  if (req.auth.accountType != 'admin') {
+  if (req.auth.accountType !== 'admin') {
     let error = new Error('Unauthorized, not and admin')
     error.status = 401
     console.log(error)

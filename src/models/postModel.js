@@ -12,8 +12,7 @@ const postSchema = new mongoose.Schema({
   },
   likes: [{
     username: {
-      type: String,
-      unique: true
+      type: String
     }
   }],
   edited: {
@@ -22,7 +21,7 @@ const postSchema = new mongoose.Schema({
   },
 
   author: {
-    type: mongoose.SchemaTypes.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
   },

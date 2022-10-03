@@ -1,16 +1,24 @@
 const banModel = require('../models/banModel')
 
-async function findBansByUserIdGivenTo(userId) {
+async function findBansByUserIdGivenTo(id) {
   try {
-    return await banModel.find({givenTo: userId})
+    return await banModel.find({givenTo: id})
   } catch (e) {
     console.log(e)
   }
 }
 
-async function findBansByUserIdGivenByPage(userId, options) {
+async function findBansByUserIdGivenByPage(id, options) {
   try {
-    return await banModel.paginate({givenBy: userId})
+    return await banModel.paginate({givenBy: id})
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+async function saveBan(ban) {
+  try {
+    return await banModel.create(ban)
   } catch (e) {
     console.log(e)
   }
@@ -19,5 +27,6 @@ async function findBansByUserIdGivenByPage(userId, options) {
 
 module.exports = {
   findBansByUserIdGivenTo,
-  findBansByUserIdGivenByPage
+  findBansByUserIdGivenByPage,
+  saveBan
 }
