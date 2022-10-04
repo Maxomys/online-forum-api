@@ -62,6 +62,10 @@ paths:
       summary: return user by username
       tags:
         - users
+      parameters:
+        - name: username
+          in: path
+          required: true
       responses:
         200:
           description: returns the user
@@ -127,6 +131,10 @@ paths:
       summary: delete category by id
       tags:
         - categories
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
       security:
         - bearerAuth: []
       responses:
@@ -137,6 +145,9 @@ paths:
       summary:
         get page of threads in given category
       parameters:
+        - name: categoryId
+          in: path
+          required: true
         - in: query
           name: page
           schema:
@@ -170,7 +181,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ThreadPage'
-  /api/v1/threads/{threadId}/threads:
+  /api/v1/threads/{threadId}:
     get:
       summary: Get thread by its id
       tags:
@@ -193,6 +204,10 @@ paths:
           description: thread successfully deleted
         404:
           description: thread not found
+    parameters:
+      - name: threadId
+        in: path
+        required: true
   /api/v1/threads:
     post:
       summary: Post new thread
@@ -212,6 +227,9 @@ paths:
     get:
       summary: Get page of posts per given thread
       parameters:
+        - name: threadId
+          in: path
+          required: true
         - in: query
           name: page
           schema:
@@ -268,10 +286,14 @@ paths:
       tags:
         - posts
       responses:
-        200: 
+        200:
           description: Successfully deleted the post
         404:
           description: Post not found
+    parameters:
+      - name: postId
+        in: path
+        required: true
   /api/v1/posts:
     post:
       summary: Create new post
@@ -287,23 +309,56 @@ paths:
       responses:
         201:
           description: Post successfully created
-      
+  /api/v1/users/:userId/bansReceived:
+    get:
+      summary: Get list of bans received by user with userId
+      tags:
+        - bans
+      responses:
+        200:
+          description: returns the list of bans
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ban'
+  /api/v1/bans:
+    post:
+      summary: Adds ban
+      tags:
+        - bans
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BanDto'
+      security:
+        - bearerAuth: [ ]
+      responses:
+        201:
+          description: ban successfully added
 
 
 components:
   schemas:
     UserDto:
       type: object
+      required:
+        - name
+        - password
+        - email
       properties:
         name:
           type: string
         password:
+          type: string
+        email:
           type: string
         about:
           type: string
       example:
         name: user1
         password: password
+        email: email@email.com
         about: im just a simple user
     User:
       type: object
@@ -336,6 +391,8 @@ components:
           type: number
     CategoryDto:
       type: object
+      required:
+        - name
       properties:
         name:
           type: string
@@ -379,6 +436,9 @@ components:
           type: string
     ThreadDto:
       type: object
+      required:
+        - name
+        - categoryId
       properties:
         name:
           type: string
@@ -435,18 +495,53 @@ components:
           type: string
     PostDto:
       type: object
+      required:
+        - contents
+        - threadId
       properties:
         contents:
           type: string
-        author:
-          type: string
-          description: id of post's author
-        thread:
+        threadId:
           type: string
           description: id of the thread the post is in
-        replyTo:
+        replyToId:
           type: string
           description: id of the post this post is replying to
+    Ban:
+      type: object
+      properties:
+        givenBy:
+          type: object
+          properties:
+            name:
+              type: string
+            id:
+              type: string
+        givenTo:
+          type: object
+          properties:
+            name:
+              type: string
+            id:
+              type: string
+        endsAt:
+          type: string
+        cancelled:
+          type: boolean
+        description:
+          type: string
+    BanDto:
+      required:
+        - userId
+      type: object
+      properties:
+        userId:
+          type: string
+          description: id of the user who receives the ban
+        endsAt:
+          type: string
+        description:
+          type: string
   securitySchemes:
     BearerAuth:
       type: http
@@ -460,3 +555,4 @@ tags:
   - name: categories
   - name: threads
   - name: posts
+  - name: bans
