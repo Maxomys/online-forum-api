@@ -17,8 +17,5 @@ jobs:
       - run:
           name: Waiting for Mongo
           command: dockerize -wait tcp://localhost:27017 -timeout 1m
-      - run:
-          name: Wait for db
-          command: dockerize -wait mongodb://localhost:27017 -timeout 1m
       - run: npm i
       - run: npm test
