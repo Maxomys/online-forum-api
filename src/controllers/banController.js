@@ -8,7 +8,6 @@ async function createBan(req, res, next) {
   if (req.auth.accountType !== 'admin') {
     let error = new Error('Unauthorized, not and admin')
     error.status = 401
-    console.log(error)
     next(error)
     return
   }

@@ -1,6 +1,7 @@
 const userRepository = require('../repositories/userRepository')
 const { userDto } = require('../mappers/userMapper')
 const bcrypt = require('bcrypt')
+
 const saltRounds = 10
 
 async function getUserDtoByUsername(username) {

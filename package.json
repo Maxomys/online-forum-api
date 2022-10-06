@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/server.js",
     "devStart": "nodemon src/server.js",
-    "test": "mocha test/**/*.test.js"
+    "test": "cross-env NODE_ENV=test mocha test/**/*.test.js --exit"
   },
   "repository": {},
   "author": "Maxomys",
@@ -14,6 +14,7 @@
   "dependencies": {
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
     "express-jwt": "^7.7.5",
@@ -29,6 +30,7 @@
     "chai": "^4.3.6",
     "mocha": "^10.0.0",
     "nodemon": "^2.0.20",
-    "sinon": "^14.0.0"
+    "sinon": "^14.0.0",
+    "supertest": "^6.3.0"
   }
 }

@@ -15,7 +15,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserDto'
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
       responses:
         200:
           description:
@@ -39,6 +44,15 @@ paths:
       summary: returns jwt tokens
       tags:
         - users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
       responses:
         200:
           description:
@@ -223,7 +237,7 @@ paths:
       responses:
         201:
           description: New thread successfully created
-  /api/v1/{threadId}/posts:
+  /api/v1/threads/{threadId}/posts:
     get:
       summary: Get page of posts per given thread
       parameters:
@@ -235,13 +249,13 @@ paths:
           schema:
             type: string
           description: 
-            Number of requested page, default - 1
+            Number of requested page, default - '1'
         - in: query
           name: limit
           schema:
             type: string
           description: 
-            Limit of posts per page, default - 10
+            Limit of posts per page, default - '10'
         - in: query
           name: sort
           schema:
@@ -253,7 +267,7 @@ paths:
           schema:
             type: string
           description: 
-            Sorting direction, '1' for ascending, '-1' for descending, default - -1
+            Sorting direction, '1' for ascending, '-1' for descending, default - '1'
       tags:
         - posts
       responses:
@@ -309,11 +323,15 @@ paths:
       responses:
         201:
           description: Post successfully created
-  /api/v1/users/:userId/bansReceived:
+  /api/v1/users/{userId}/bansReceived:
     get:
       summary: Get list of bans received by user with userId
       tags:
         - bans
+      parameters:
+        - name: userId
+          in: path
+          required: true
       responses:
         200:
           description: returns the list of bans

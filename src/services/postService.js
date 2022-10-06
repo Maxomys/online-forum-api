@@ -10,11 +10,18 @@ async function getPostPageByThreadId(threadId, options) {
 
 async function createNewPost(postDto, username) {
   const user = await userRepository.getUserByUsername(username)
+  if (user.isBanned) {
+    let error = new Error('User is banned from posting')
+    error.status = 400
+    throw error
+  }
+
   if (!user) {
     let error = new Error('User not found for name: ' + username)
     error.status = 400
     throw error
   }
+
   let post = {
     contents: postDto.contents,
     author: user._id,

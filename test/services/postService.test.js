@@ -64,7 +64,7 @@ describe('Post Service tests', () => {
     expect(postRepositoryStub.args[0][0].author).to.equal('userId')
   })
 
-  it('throws error when usern in not the author', async () => {
+  it('throws error when user in not the author', async () => {
     sinon.stub(userRepository, 'getUserByUsername')
       .returns(user)
     sinon.stub(postRepository, 'getPostById')

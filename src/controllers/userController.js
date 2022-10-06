@@ -1,10 +1,11 @@
 const userService = require('../services/userService')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-const randomstring = require('randomstring')
+const randomString = require('randomstring')
+const tokenUtils = require('../utils/tokenUtils')
 
 async function getUserByUsername(req, res) {
-  userDto = await userService.getUserDtoByUsername(req.params.username)
+  const userDto = await userService.getUserDtoByUsername(req.params.username)
   res.status(200)
   res.json(userDto)
 }
@@ -28,10 +29,10 @@ async function handleLogin(req, res) {
     return
   }
 
-  const refreshString = randomstring.generate()
+  const refreshString = randomString.generate()
   
-  const token = await buildToken(foundUser)
-  const refreshToken = await buildRefreshToken(foundUser, refreshString)
+  const token = await tokenUtils.buildAccessToken(foundUser)
+  const refreshToken = await tokenUtils.buildRefreshToken(foundUser, refreshString)
   
   await userService.addRefreshString(foundUser, refreshString)
 
@@ -40,7 +41,7 @@ async function handleLogin(req, res) {
 }
 
 async function handleRefresh(req, res) {
-  refreshToken = req.body.refreshToken
+  const refreshToken = req.body.refreshToken
   jwt.verify(refreshToken, process.env.SECRET, async (err, decoded) => {
     if (err) {
       res.sendStatus(400)
@@ -53,53 +54,15 @@ async function handleRefresh(req, res) {
       return
     }
 
-    const refreshString = randomstring.generate()
+    const refreshString = randomString.generate()
     
-    const token = await buildToken(foundUser)
-    const refreshToken = await buildRefreshToken(foundUser, refreshString)
+    const token = await tokenUtils.buildAccessToken(foundUser)
+    const refreshToken = await tokenUtils.buildRefreshToken(foundUser, refreshString)
     
     await userService.addRefreshString(foundUser, refreshString)
 
     res.status(200)
     res.json({token, refreshToken})
-  })
-}
-
-function buildToken(user) {
-  return new Promise((resolve, reject) => {
-    jwt.sign({
-        name: user.name,
-        accountType: user.accountType
-      }, 
-      process.env.SECRET,
-      {expiresIn: '2 hours'},
-      (err, token) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(token)
-        }
-      }
-    ) 
-  })
-}
-
-function buildRefreshToken(user, refreshString) {
-  return new Promise((resolve, reject) => {
-    jwt.sign({
-        name: user.name,
-        refreshToken: refreshString
-      },
-      process.env.SECRET,
-      {expiresIn: '30 days'},
-      (err, token) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(token)
-        }
-      }
-    )
   })
 }
 

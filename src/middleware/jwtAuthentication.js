@@ -3,20 +3,23 @@ const jwt = require('jsonwebtoken')
 function authenticate(req, res, next) {
   let token = req.get('authorization')
   if (!token) {
-    res.sendStatus(400)
+    let error = new Error('No token provided!')
+    error.status = 401
+    next(error)
     return
   }
-  token = token.replace(/^Bearer\s+/, "")
-  let decoded
-  try {
-    decoded = jwt.verify(token, process.env.SECRET)
-  } catch (e) {
-    res.status(401)
-    res.json(e)
-    return
-  }
-  req.auth = decoded
-  next()
+  token = token.replace(/^[Bb]earer\s+/, '')
+
+  jwt.verify(token, process.env.SECRET, function(err, decoded) {
+    if (err) {
+      let error = new Error('Token verification error')
+      error.status = 401
+      next(error)
+    } else {
+      req.auth = decoded
+      next()
+    }
+  })
 }
 
 

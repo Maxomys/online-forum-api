@@ -4,7 +4,7 @@ async function getPostsPageByThreadId(req, res) {
   const options = {
     page: req.query.page ?? 1,
     limit: req.query.limit ?? process.env.PAGE_LIMIT,
-    sort: {[req.query.sort ?? 'createdAt']: req.query.dir ?? -1}
+    sort: { [req.query.sort ?? 'createdAt']: req.query.dir ?? 1 }
   }
   const page = await postService.getPostPageByThreadId(req.params.threadId, options)
   res.status(200)
@@ -19,21 +19,21 @@ async function getPostById(req, res) {
 
 async function postNewPost(req, res, next) {
   try {
-    await postService.createNewPost(req.body, req.auth.name)
+    const post = await postService.createNewPost(req.body, req.auth.name)
+    res.status(201)
+    res.json({ id: post._id })
   } catch (e) {
     next(e)
-    return
   }
-  res.sendStatus(201)
 }
 
 async function deletePostById(req, res, next) {
   try {
     await postService.deletePostById(req.params.postId, req.auth.name)
+    res.sendStatus(200)
   } catch (e) {
-    
+    next(e)
   }
-  res.sendStatus(200)
 }
 
 
