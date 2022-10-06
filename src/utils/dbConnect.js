@@ -8,8 +8,6 @@ async function connect(app) {
   require('../models/threadModel')
   require('../models/userModel')
 
-  mongoose.set('debug', true)
-
   let uri
   switch (app.get('env')) {
     case 'test':
