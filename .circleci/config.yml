@@ -11,7 +11,7 @@ jobs:
       - image: circleci/mongo
         environment:
           MONGO_INITDB_ROOT_USERNAME: mongouser
-          MONGO_INITDB_ROOT_PASSWORD: p@mongopassword
+          MONGO_INITDB_ROOT_PASSWORD: mongopassword
     steps:
       - checkout
       - run:
