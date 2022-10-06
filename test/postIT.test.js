@@ -21,6 +21,8 @@ describe('Post integration tests', function() {
   let thread1
 
   before(async function() {
+    await dbConnect.connect()
+
     await userModel.deleteMany({})
     await categoryModel.deleteMany({})
     await threadModel.deleteMany({})
