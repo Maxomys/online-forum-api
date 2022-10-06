@@ -6,8 +6,8 @@ jobs:
     docker:
       - image: cimg/node:lts
         environment:
-          DB_TEST_URI="mongodb://mongouser:mongopassword@localhost/dbtest?retryWrites=true&w=majority"
-          SECRET='secret'
+          - DB_TEST_URI="mongodb://mongouser:mongopassword@localhost/dbtest?retryWrites=true&w=majority"
+          - SECRET='secret'
       - image: circleci/mongo
         environment:
           MONGO_INITDB_ROOT_USERNAME: mongouser
