@@ -10,6 +10,7 @@ jobs:
           - SECRET: secret
       - image: circleci/mongo
         environment:
+          - MONGO_INITDB_DATABASE=dbtest
           - MONGO_INITDB_ROOT_USERNAME: mongouser
           - MONGO_INITDB_ROOT_PASSWORD: mongopassword
     steps:
