@@ -10,8 +10,8 @@ jobs:
           - SECRET: secret
       - image: circleci/mongo
         environment:
-          MONGODB_USERNAME: mongouser
-          MONGODB_PASSWORD: mongopassword
+          - MONGO_INITDB_ROOT_USERNAME: mongouser
+          - MONGO_INITDB_ROOT_PASSWORD: mongopassword
     steps:
       - checkout
       - run:
