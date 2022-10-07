@@ -19,6 +19,9 @@ describe('Post integration tests', function() {
   let user1
   let category1
   let thread1
+  let post1
+
+  let accessToken
 
   before(async function() {
     await userModel.deleteMany({})
@@ -41,6 +44,17 @@ describe('Post integration tests', function() {
       author: user1._id,
       category: category1._id
     })
+
+    post1 = await postModel.create({
+      contents: 'post contents',
+      author: user1._id,
+      thread: thread1._id
+    })
+
+    accessToken = await tokenUtils.buildAccessToken({
+      name: user1.name,
+      accountType: user1.accountType
+    })
   })
 
   after(async function() {
@@ -57,11 +71,6 @@ describe('Post integration tests', function() {
   })
 
   it('Sends and retrieves a post', async function() {
-
-    const accessToken = await tokenUtils.buildAccessToken({
-      name: user1.name,
-      accountType: user1.accountType
-    })
 
     const postDto = {
       contents: 'postContents',
@@ -85,5 +94,35 @@ describe('Post integration tests', function() {
     }
 
     expect(getResponse.body.id).to.equal(postResponse.body.id)
+  })
+
+  it('Deletes a post', async function() {
+    let deleteResponse
+
+    try {
+      deleteResponse = await request(app)
+        .delete('/api/v1/posts/' + post1.id)
+        .set('authorization', 'bearer ' + accessToken)
+    } catch (e) {
+      console.log(e)
+    }
+
+    let postRetrieved = await postModel.findOne({_id: user1.id})
+
+    expect(deleteResponse.status).to.equal(200)
+    expect(postRetrieved).to.be.null
+  })
+
+  it('Gets page of posts in a thread', async function() {
+    let getResponse
+
+    try {
+      getResponse = await request(app)
+        .get('/api/v1/threads/' + thread1.id + '/posts')
+    } catch (e) {
+      console.log(e)
+    }
+
+    expect(getResponse.body.docs).to.not.be.empty
   })
 })

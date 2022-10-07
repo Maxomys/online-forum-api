@@ -46,8 +46,8 @@ async function deletePostById(postId, username) {
   
   const foundPost = await postRepository.getPostById(postId)
 
-  //check if retrieved user is an admin or the author 
-  if (user._id !== foundPost.author && user.accountType !== 'admin') {
+  //check if retrieved user is an admin or the author
+  if (user.id !== foundPost.author.id && user.accountType !== 'admin') {
     let error = new Error('Not authorized to delete the post')
     error.status = 401
     throw error
