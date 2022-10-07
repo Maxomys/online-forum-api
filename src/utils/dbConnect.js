@@ -19,7 +19,6 @@ async function connect(app) {
   }
 
   try {
-    console.log(uri)
     await mongoose.connect(uri, { autoIndex: true })
     console.log('Mongoose connected!')
   } catch (e) {
