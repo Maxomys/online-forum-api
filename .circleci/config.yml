@@ -6,7 +6,7 @@ jobs:
     docker:
       - image: cimg/node:lts
         environment:
-          - DB_TEST_URI: mongodb://mongouser:mongopassword@localhost/dbtest?retryWrites=true&w=majority
+          - DB_TEST_URI: mongodb://mongouser:mongopassword@localhost
           - SECRET: secret
       - image: circleci/mongo
         environment:
