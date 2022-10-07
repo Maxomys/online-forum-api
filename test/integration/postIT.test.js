@@ -1,16 +1,16 @@
 const { expect } = require('chai')
 const sinon = require('sinon')
 const { stub } = require('sinon')
-const app = require('../src/server')
+const app = require('../../src/server')
 const request = require('supertest')
-const hashUtils = require('../src/utils/hashUtils')
-const tokenUtils = require('../src/utils/tokenUtils')
-const dbConnect = require('../src/utils/dbConnect')
+const hashUtils = require('../../src/utils/hashUtils')
+const tokenUtils = require('../../src/utils/tokenUtils')
+const dbConnect = require('../../src/utils/dbConnect')
 
-const categoryModel = require('../src/models/categoryModel')
-const threadModel = require('../src/models/threadModel')
-const userModel = require('../src/models/userModel')
-const postModel = require('../src/models/postModel')
+const categoryModel = require('../../src/models/categoryModel')
+const threadModel = require('../../src/models/threadModel')
+const userModel = require('../../src/models/userModel')
+const postModel = require('../../src/models/postModel')
 
 describe('Post integration tests', function() {
 
