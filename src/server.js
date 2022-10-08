@@ -11,8 +11,10 @@ const errorHandler = require('./middleware/errorHandler')
 
 const app = express()
 
-(async () => await dbConnect.connect(app))()
-
+async function test() {
+  await dbConnect.connect(app)
+}
+test()
 app.use(cors())
 
 
