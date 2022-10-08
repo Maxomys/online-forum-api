@@ -68,48 +68,48 @@ describe('Post integration tests', function() {
     }
   })
 
-  it('Sends and retrieves a post', async function() {
-
-    const postDto = {
-      contents: 'postContents',
-      threadId: thread1._id.toString()
-    }
-
-    let postResponse
-    let getResponse
-
-    try {
-      postResponse = await request(app)
-        .post('/api/v1/posts')
-        .send(postDto)
-        .set('authorization', 'bearer ' + accessToken)
-
-      getResponse = await request(app)
-        .get('/api/v1/posts/' + postResponse.body.id)
-
-    } catch (e) {
-      console.log(e)
-    }
-
-    expect(getResponse.body.id).to.equal(postResponse.body.id)
-  })
-
-  it('Deletes a post', async function() {
-    let deleteResponse
-
-    try {
-      deleteResponse = await request(app)
-        .delete('/api/v1/posts/' + post1.id)
-        .set('authorization', 'bearer ' + accessToken)
-    } catch (e) {
-      console.log(e)
-    }
-
-    let postRetrieved = await postModel.findOne({_id: user1.id})
-
-    expect(deleteResponse.status).to.equal(200)
-    expect(postRetrieved).to.be.null
-  })
+  // it('Sends and retrieves a post', async function() {
+  //
+  //   const postDto = {
+  //     contents: 'postContents',
+  //     threadId: thread1._id.toString()
+  //   }
+  //
+  //   let postResponse
+  //   let getResponse
+  //
+  //   try {
+  //     postResponse = await request(app)
+  //       .post('/api/v1/posts')
+  //       .send(postDto)
+  //       .set('authorization', 'bearer ' + accessToken)
+  //
+  //     getResponse = await request(app)
+  //       .get('/api/v1/posts/' + postResponse.body.id)
+  //
+  //   } catch (e) {
+  //     console.log(e)
+  //   }
+  //
+  //   expect(getResponse.body.id).to.equal(postResponse.body.id)
+  // })
+  //
+  // it('Deletes a post', async function() {
+  //   let deleteResponse
+  //
+  //   try {
+  //     deleteResponse = await request(app)
+  //       .delete('/api/v1/posts/' + post1.id)
+  //       .set('authorization', 'bearer ' + accessToken)
+  //   } catch (e) {
+  //     console.log(e)
+  //   }
+  //
+  //   let postRetrieved = await postModel.findOne({_id: user1.id})
+  //
+  //   expect(deleteResponse.status).to.equal(200)
+  //   expect(postRetrieved).to.be.null
+  // })
 
   it('Gets page of posts in a thread', async function() {
     let getResponse
