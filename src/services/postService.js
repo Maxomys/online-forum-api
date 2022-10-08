@@ -4,8 +4,7 @@ const { postDto } = require('../mappers/postMapper')
 
 async function getPostPageByThreadId(threadId, options) {
   let page = await postRepository.getPostPageByThreadId(threadId, options)
-  console.log('in service')
-  console.log(page)
+
   page.docs = page.docs.map(post => postDto(post))
   return page
 }

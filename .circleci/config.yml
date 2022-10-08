@@ -8,7 +8,8 @@ jobs:
         environment:
           - DB_TEST_URI: mongodb://mongouser:mongopassword@localhost
           - SECRET: secret
-      - image: mongo:latest
+          - PAGE_LIMIT: 10
+      - image: circleci/mongo
         environment:
           - MONGO_INITDB_DATABASE=dbtest
           - MONGO_INITDB_ROOT_USERNAME: mongouser

@@ -4,7 +4,6 @@ async function getPostPageByThreadId(threadId, options) {
   options.populate = ['author', 'thread']
 
   try {
-    console.log('in post repository')
     return await postModel.paginate({thread: threadId}, options)
   } catch (e) {
     console.log(e)

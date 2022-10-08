@@ -7,7 +7,6 @@ async function getPostsPageByThreadId(req, res) {
     sort: { [req.query.sort ?? 'createdAt']: req.query.dir ?? 1 }
   }
   const page = await postService.getPostPageByThreadId(req.params.threadId, options)
-  console.log(page)
   res.status(200)
   res.json(page)
 }
