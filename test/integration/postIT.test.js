@@ -63,8 +63,6 @@ describe('Post integration tests', function() {
       await categoryModel.deleteMany({})
       await threadModel.deleteMany({})
       await postModel.deleteMany({})
-
-      await dbConnect.disconnect()
     } catch (e) {
       console.log(e)
     }
