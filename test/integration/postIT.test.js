@@ -23,7 +23,7 @@ describe('Post integration tests', function() {
 
   let accessToken
 
-  before(async function() {
+  beforeEach(async function() {
     await userModel.deleteMany({})
     await categoryModel.deleteMany({})
     await threadModel.deleteMany({})
@@ -57,7 +57,7 @@ describe('Post integration tests', function() {
     })
   })
 
-  after(async function() {
+  afterEach(async function() {
     try {
       await userModel.deleteMany({})
       await categoryModel.deleteMany({})
@@ -122,5 +122,6 @@ describe('Post integration tests', function() {
     }
 
     expect(getResponse.body.docs).to.not.be.empty
+    expect(getResponse.body.docs[0].contents).to.equal(post1.contents)
   })
 })
