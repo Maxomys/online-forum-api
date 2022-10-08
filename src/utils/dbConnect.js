@@ -16,6 +16,8 @@ async function connect(app) {
     case 'development':
       uri = process.env.DB_URI
       break
+    default:
+      uri = process.env.DB_URI
   }
 
   try {
