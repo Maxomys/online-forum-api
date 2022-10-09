@@ -5,6 +5,7 @@ async function findBansByUserIdGivenTo(id) {
     return await banModel.find({givenTo: id})
   } catch (e) {
     console.log(e)
+    throw e
   }
 }
 
@@ -13,6 +14,7 @@ async function findBansByUserIdGivenByPage(id, options) {
     return await banModel.paginate({givenBy: id})
   } catch (e) {
     console.log(e)
+    throw e
   }
 }
 
@@ -21,6 +23,7 @@ async function saveBan(ban) {
     return await banModel.create(ban)
   } catch (e) {
     console.log(e)
+    throw e
   }
 }
 

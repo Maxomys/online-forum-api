@@ -7,6 +7,7 @@ async function getPostPageByThreadId(threadId, options) {
     return await postModel.paginate({thread: threadId}, options)
   } catch (e) {
     console.log(e)
+    throw e
   }
 }
 
@@ -15,6 +16,7 @@ async function getPostById(postId) {
     return await postModel.findById(postId).populate(['author', 'thread'])
   } catch (e) {
     console.log(e)
+    throw e
   }
 }
 
@@ -23,6 +25,7 @@ async function getPostCountByThreadId(threadId) {
     return await postModel.find({thread: threadId}).count()
   } catch (e) {
     console.log(e)
+    throw e
   }
 }
 
@@ -31,6 +34,7 @@ async function savePost(post) {
     return await postModel.create(post)
   } catch (e) {
     console.log(e)
+    throw e
   }
 }
 
@@ -39,6 +43,7 @@ async function removePostsByThreadId(threadId) {
     return await postModel.deleteMany({thread: threadId})
   } catch (e) {
     console.log(e)
+    throw e
   }
 }
 
@@ -47,6 +52,7 @@ async function removePostById(id) {
     return await postModel.deleteOne({_id: id})
   } catch (e) {
     console.log(e)
+    throw e
   }
 }
 

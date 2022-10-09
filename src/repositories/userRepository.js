@@ -5,6 +5,7 @@ async function getUserById(id) {
     return await userModel.findById(id)
   } catch (e) {
     console.log(e)
+    throw e
   }
 }
 
@@ -13,6 +14,7 @@ async function getUserByUsername(username) {
     return await userModel.findOne({name: username})
   } catch (e) {
     console.log(e)
+    throw e
   }
 }
 
@@ -21,6 +23,7 @@ async function saveUser(user) {
     return await userModel.create(user)
   } catch (e) {
     console.log(e)
+    throw e
   }
 }
 

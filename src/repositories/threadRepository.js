@@ -5,6 +5,7 @@ async function getThreadPageByCategoryId(categoryId, options) {
     return await threadModel.paginate({category: categoryId}, options)
   } catch (e) {
     console.log(e)
+    throw e
   }
 }
 
@@ -13,6 +14,7 @@ async function getThreadByName(name) {
     return await threadModel.findOne({name: name})
   } catch (e) {
     console.log(e)
+    throw e
   }
 }
 
@@ -21,6 +23,7 @@ async function getThreadById(id) {
     return await threadModel.findById(id)
   } catch (e) {
     console.log(e)
+    throw e
   }
 }
 
@@ -29,6 +32,7 @@ async function saveThread(thread) {
     return await threadModel.create(thread)
   } catch (e) {
     console.log(e)
+    throw e
   }
 }
 
@@ -37,6 +41,7 @@ async function deleteThreadById(threadId) {
     return await threadModel.deleteOne({_id: threadId})
   } catch (e) {
     console.log(e)
+    throw e
   }
 }
 
@@ -45,6 +50,7 @@ async function getThreadCountByCategoryId(categoryId) {
     return await threadModel.find({category: categoryId}).count()
   } catch (e) {
     console.log(e)
+    throw e
   }
 }
 

@@ -10,10 +10,14 @@ async function getUserByUsername(req, res) {
   res.json(userDto)
 }
 
-async function createNewUser(req, res) {
-  const savedUserDto = await userService.createNewUser(req.body)
-  res.status(201)
-  res.json(savedUserDto)
+async function createNewUser(req, res, next) {
+  try {
+    const savedUserDto = await userService.createNewUser(req.body)
+    res.status(201)
+    res.json(savedUserDto)
+  } catch (e) {
+    next(e)
+  }
 }
 
 async function handleLogin(req, res) {

@@ -7,6 +7,7 @@ const yamljs = require('yamljs')
 
 const routesV1 = require('./routes/routesV1')
 const errorHandler = require('./middleware/errorHandler')
+const validationErrorHandler = require('./middleware/validationErrorHandler')
 
 
 const app = express()
@@ -20,6 +21,7 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(yamljs.load('./swaggerdoc.
 
 app.use('/api/v1', express.json(), routesV1)
 
+app.use(validationErrorHandler)
 app.use(errorHandler)
 
 
