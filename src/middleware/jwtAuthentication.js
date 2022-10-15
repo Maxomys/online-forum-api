@@ -13,8 +13,8 @@ function authenticate(req, res, next) {
   jwt.verify(token, process.env.SECRET, function(err, decoded) {
     if (err) {
       let error = new Error('Token verification error')
-      error.status = 401
-      next(error)
+      err.status = 401
+      next(err)
     } else {
       req.auth = decoded
       next()

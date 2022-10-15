@@ -1,9 +1,13 @@
 const categoryService = require('../services/categoryService')
 
-async function getAllCategories(req, res) {
-  const categoryDtos = await categoryService.getAllCategories()
-  res.status(200)
-  res.json(categoryDtos)
+async function getAllCategories(req, res, next) {
+  try {
+    const categoryDtos = await categoryService.getAllCategories()
+    res.status(200)
+    res.json(categoryDtos)
+  } catch (e) {
+    next(e)
+  }
 }
 
 async function postNewCategory(req, res, next) {

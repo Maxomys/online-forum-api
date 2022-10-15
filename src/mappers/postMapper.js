@@ -8,7 +8,8 @@ function postDto(post) {
     threadName: post.thread.name,
     author: {
       id: post.author._id,
-      username: post.author.name
+      username: post.author.name,
+      about: post.author.about
     },
     replyToId: post.replyTo
   }
